@@ -1,6 +1,6 @@
 {
   "name": "@idrsolutions/buildvu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Client module for accessing the BuildVu microservice example",
   "main": "buildvu-client.js",
   "repository": {

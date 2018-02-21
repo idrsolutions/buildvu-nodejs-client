@@ -17,7 +17,7 @@ npm install @idrsolutions/buildvu
 # Usage #
 
 ```javascript
-var buildvu = require('buildvu');
+var buildvu = require('@idrsolutions/buildvu');
 
 var baseEndpoint = "https://example.com/";
 var endpoint = baseEndpoint + "buildvu";
