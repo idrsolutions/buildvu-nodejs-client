@@ -9,7 +9,7 @@ It functions as an easy to use, plug and play library that lets you use BuildVu 
 # Installation #
 
 ```
-npm install buildvu-nodejs-client
+npm install @idrsolutions/buildvu
 ```
 
 -----
