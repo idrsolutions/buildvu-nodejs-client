@@ -1,0 +1,26 @@
+{
+  "name": "buildvu",
+  "version": "1.0.0",
+  "description": "Client module for accessing the BuildVu microservice example",
+  "main": "buildvu-client.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idrsolutions/buildvu-nodejs-client.git"
+  },
+  "keywords": [
+    "buildvu",
+    "idrsolutions",
+    "nodejs",
+    "client",
+    "microservice"
+  ],
+  "author": "IDRsolutions (https://www.idrsolutions.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/idrsolutions/buildvu-nodejs-client/issues"
+  },
+  "homepage": "https://github.com/idrsolutions/buildvu-nodejs-client#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
