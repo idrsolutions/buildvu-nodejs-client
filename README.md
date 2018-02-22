@@ -1,8 +1,8 @@
 # BuildVu Node.js Client #
 
-BuildVu Node.js Client is the Node.js API for [IDRSolutions'](https://www.idrsolutions.com) [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
+BuildVu Node.js Client is the Node.js API for IDRSolutions' [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
 
-It functions as an easy to use, plug and play library that lets you use BuildVu from Node.js. 
+It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Node.js. 
 
 -----
 
