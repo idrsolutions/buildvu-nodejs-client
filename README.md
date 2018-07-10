@@ -16,10 +16,12 @@ npm install @idrsolutions/buildvu
 
 # Usage #
 
+## Basic: #
+
 ```javascript
 var buildvu = require('@idrsolutions/buildvu');
 
-var baseEndpoint = "https://example.com/";
+var baseEndpoint = "http://localhost:8080/microservice-example/";
 var endpoint = baseEndpoint + "buildvu";
 
 buildvu.convert({
@@ -36,6 +38,8 @@ buildvu.convert({
 });
 ```
 
+See `example.js` for examples.
+
 -----
 
 # Who do I talk to? #
@@ -43,6 +47,14 @@ buildvu.convert({
 Found a bug, or have a suggestion / improvement? Let us know through the Issues page.
 
 Got questions? You can contact us [here](https://idrsolutions.zendesk.com/hc/en-us/requests/new).
+
+-----
+
+# Code of Conduct #
+
+Short version: Don't be an awful person.
+
+Longer version: Everyone interacting in the BuildVu Ruby Client project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md). 
 
 -----
 
