@@ -27,11 +27,11 @@ function failureListener(e) {
 
 function successListener(e) {
     console.log(JSON.stringify(e));
-    console.log("Converted " + baseEndpoint + e.previewPath);
+    console.log("Converted " + e.previewPath);
 }
 
 
-var baseEndpoint = "https://example.com/";
+var baseEndpoint = "http://localhost:8080/microservice-example/";
 var endpoint = baseEndpoint + "buildvu";
 
 buildvu.convert({
@@ -39,7 +39,7 @@ buildvu.convert({
     parameters: {
         token: "token-if-required"
     },
-    file: "your-filename.pdf",
+    file: "../../test.pdf",
     progress: progressListener,
     success: successListener,
     failure: failureListener
