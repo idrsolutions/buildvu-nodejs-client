@@ -39,7 +39,7 @@ buildvu.convert({
     parameters: {
         token: "token-if-required"
     },
-    file: "../../test.pdf",
+    file: "path/to/file.pdf",
     progress: progressListener,
     success: successListener,
     failure: failureListener
