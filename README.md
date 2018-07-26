@@ -21,8 +21,7 @@ npm install @idrsolutions/buildvu
 ```javascript
 var buildvu = require('@idrsolutions/buildvu');
 
-var baseEndpoint = "http://localhost:8080/microservice-example/";
-var endpoint = baseEndpoint + "buildvu";
+var endpoint = "http://localhost:8080/microservice-example/buildvu";
 
 buildvu.convert({
     endpoint: endpoint,
@@ -33,7 +32,7 @@ buildvu.convert({
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log("Converted " + e.previewPath);
+        console.log("Converted " + e.previewUrl);
     }
 });
 ```
