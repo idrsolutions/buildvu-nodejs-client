@@ -27,19 +27,17 @@ function failureListener(e) {
 
 function successListener(e) {
     console.log(JSON.stringify(e));
-    console.log("Converted " + baseEndpoint + e.previewPath);
+    console.log("Converted " + e.previewUrl);
 }
 
-
-var baseEndpoint = "https://example.com/";
-var endpoint = baseEndpoint + "buildvu";
+var endpoint = "http://localhost:8080/microservice-example/buildvu";
 
 buildvu.convert({
     endpoint: endpoint,
     parameters: {
         token: "token-if-required"
     },
-    file: "your-filename.pdf",
+    file: "path/to/file.pdf",
     progress: progressListener,
     success: successListener,
     failure: failureListener
