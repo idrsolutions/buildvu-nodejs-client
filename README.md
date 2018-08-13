@@ -28,7 +28,12 @@ buildvu.convert({
     parameters: {
         token: "token-if-required"
     },
+    // Upload a local file to the server.
     file: "your-filename.pdf",
+    // (Optional) file takes precedence over conversionUrl. Remove file parameter to use conversionUrl parameter.
+    conversionUrl: "http://path.to/file.pdf",
+    // (Optional) it is recommended you use filename when using conversionUrl.
+    filename: "yourCustomFilename.pdf",
     failure: function() { },
     progress: function() { },
     success: function(e) {
