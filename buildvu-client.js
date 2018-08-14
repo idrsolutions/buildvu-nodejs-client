@@ -78,7 +78,6 @@ var fs = require('fs');
                 }
 
                 var file, size, bytes = 0;
-                var isUrlInput = false;
 
                 var dataListener = function(chunk) {
                     if (progress) {
@@ -89,6 +88,8 @@ var fs = require('fs');
                         });
                     }
                 };
+                
+                var formData = params.parameters || {};
 
                 if (params.file) {
                     if (typeof(params.file) === 'string' || params.file instanceof String) {
@@ -111,17 +112,12 @@ var fs = require('fs');
                     } else {
                         throw Error('Did not recognise type of file');
                     }
-                } else {
-                    isUrlInput = true;
-                }
-            
-
-                var formData = params.parameters || {};
-                if (!isUrlInput) {
+                    
                     formData.file = file;
                 } else {
-                    formData.conversionUrl = params.conversionUrl;                    
+                    formData.conversionUrl = params.conversionUrl;
                 }
+            
                 if (params.filename) {
                     formData.filename = params.filename;
                 }
@@ -129,7 +125,7 @@ var fs = require('fs');
                     method: 'POST',
                     uri: params.endpoint,
                     formData: formData,
-                }
+                };
 
                 request(options, function(error, response, body) {
                     if (!error && response.statusCode === 200) {
