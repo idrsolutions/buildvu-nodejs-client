@@ -88,7 +88,7 @@ var fs = require('fs');
                         });
                     }
                 };
-                
+
                 var formData = params.parameters || {};
 
                 if (params.file) {
@@ -112,15 +112,16 @@ var fs = require('fs');
                     } else {
                         throw Error('Did not recognise type of file');
                     }
-                    
+
                     formData.file = file;
+                    formData.input = "upload";
                 } else {
-                    formData.conversionUrl = params.conversionUrl;
+                    formData.input = "download";
+                    formData.url = params.conversionUrl;
                 }
-            
-                if (params.filename) {
-                    formData.filename = params.filename;
-                }
+
+                console.log(formData);
+
                 var options = {
                     method: 'POST',
                     uri: params.endpoint,

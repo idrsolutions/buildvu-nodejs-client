@@ -35,14 +35,13 @@ var endpoint = "http://localhost:8080/microservice-example/buildvu";
 buildvu.convert({
     endpoint: endpoint,
     parameters: {
-        token: "token-if-required"        
+        token: "token-if-required"
     },
     // Upload a local file to the server.
     file: "path/to/file.pdf",
     // File takes precedence over conversion url. Remove file to use conversionUrl parameter.
-    conversionUrl: "http://path.to/file.pdf",
+    //conversionUrl: "http://example/url/file.pdf",
     // filename is an optional argument, but is recommended (especially when using conversionUrl).
-    filename: "yourCustomFilename.pdf",
     progress: progressListener,
     success: successListener,
     failure: failureListener
