@@ -64,7 +64,7 @@ var fs = require('fs');
                 if (!params.endpoint) {
                     throw Error('Missing endpoint');
                 }
-                if (!params.file) {
+                if (!params.file && !params.conversionUrl) {
                     throw Error('Missing file');
                 }
                 if (params.success && typeof params.success === "function") {
@@ -89,34 +89,43 @@ var fs = require('fs');
                     }
                 };
 
-                if (typeof(params.file) === 'string' || params.file instanceof String) {
-                    file = fs.createReadStream(params.file).on('data', dataListener);
-                    size = fs.lstatSync(file.path).size;
-                } else if (params.file instanceof fs.ReadStream) {
-                    file = params.file.on('data', dataListener);
-                    size = fs.lstatSync(file.path).size;
-                } else if (params.file instanceof Buffer) {
-                    if (!params.filename) {
-                        throw Error('Missing filename');
-                    }
-                    file = {
-                        value: params.file,
-                        options: {
-                            filename: params.filename,
-                            contentType: 'application/pdf'
+                var formData = params.parameters || {};
+
+                if (params.file) {
+                    if (typeof(params.file) === 'string' || params.file instanceof String) {
+                        file = fs.createReadStream(params.file).on('data', dataListener);
+                        size = fs.lstatSync(file.path).size;
+                    } else if (params.file instanceof fs.ReadStream) {
+                        file = params.file.on('data', dataListener);
+                        size = fs.lstatSync(file.path).size;
+                    } else if (params.file instanceof Buffer) {
+                        if (!params.filename) {
+                            throw Error('Missing filename');
                         }
-                    };
+                        file = {
+                            value: params.file,
+                            options: {
+                                filename: params.filename,
+                                contentType: 'application/pdf'
+                            }
+                        };
+                    } else {
+                        throw Error('Did not recognise type of file');
+                    }
+
+                    formData.file = file;
+                    formData.input = "upload";
                 } else {
-                    throw Error('Did not recognise type of file');
+                    formData.input = "download";
+                    formData.url = params.conversionUrl;
                 }
 
-                var formData = params.parameters || {};
-                formData.file = file;
+                console.log(formData);
 
                 var options = {
                     method: 'POST',
                     uri: params.endpoint,
-                    formData: formData
+                    formData: formData,
                 };
 
                 request(options, function(error, response, body) {

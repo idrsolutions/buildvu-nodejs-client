@@ -1,6 +1,6 @@
 {
   "name": "@idrsolutions/buildvu",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "BuildVu Node.js Client is the Node.js API for IDRSolutions' BuildVu Microservice Example.",
   "main": "buildvu-client.js",
   "repository": {

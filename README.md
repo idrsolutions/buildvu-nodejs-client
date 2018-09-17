@@ -2,7 +2,7 @@
 
 BuildVu Node.js Client is the Node.js API for IDRSolutions' [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
 
-It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Node.js. 
+It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Node.js.
 
 -----
 
@@ -28,7 +28,10 @@ buildvu.convert({
     parameters: {
         token: "token-if-required"
     },
+    // Upload a local file to the server.
     file: "your-filename.pdf",
+    // Convert file from url (file takes precedence over this option).
+    conversionUrl: "http://path.to/file.pdf",
     failure: function() { },
     progress: function() { },
     success: function(e) {
@@ -53,7 +56,7 @@ Got questions? You can contact us [here](https://idrsolutions.zendesk.com/hc/en-
 
 Short version: Don't be an awful person.
 
-Longer version: Everyone interacting in the BuildVu Node.Js Client project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md). 
+Longer version: Everyone interacting in the BuildVu Node.Js Client project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
 
 -----
 

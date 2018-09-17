@@ -37,7 +37,11 @@ buildvu.convert({
     parameters: {
         token: "token-if-required"
     },
+    // Upload a local file to the server.
     file: "path/to/file.pdf",
+    // File takes precedence over conversion url. Remove file to use conversionUrl parameter.
+    //conversionUrl: "http://example/url/file.pdf",
+    // filename is an optional argument, but is recommended (especially when using conversionUrl).
     progress: progressListener,
     success: successListener,
     failure: failureListener
