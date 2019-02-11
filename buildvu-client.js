@@ -57,15 +57,53 @@ var fs = require('fs');
             }, 500);
         };
 
+        var resetFile = function() {
+            file = undefined;
+        };
+
         var progress, success, failure;
+        var file;
 
         return {
+            UPLOAD: 'upload',
+            DOWNLOAD: 'download',
+            prepareFile: function(fileValue, filename) {
+                var size, bytes = 0;
+                
+                var dataListener = function(chunk) {
+                    if (progress) {
+                        progress({
+                            state: 'uploading',
+                            loaded: bytes += chunk.length,
+                            total: size
+                        });
+                    }
+                };
+                
+                if (typeof(fileValue) === 'string' || fileValue instanceof String) {
+                    file = fs.createReadStream(fileValue).on('data', dataListener);
+                    size = fs.lstatSync(file.path).size;
+                } else if (fileValue instanceof fs.ReadStream) {
+                    file = fileValue.on('data', dataListener);
+                    size = fs.lstatSync(file.path).size;
+                } else if (fileValue instanceof Buffer) {
+                    if (!filename) {
+                        throw Error('Missing filename');
+                    }
+                    file = {
+                        value: fileValue,
+                        options: {
+                            filename: filename,
+                            contentType: 'application/pdf'
+                        }
+                    };
+                } else {
+                    throw Error('Did not recognise type of file');
+                }
+            },
             convert: function(params) {
                 if (!params.endpoint) {
                     throw Error('Missing endpoint');
-                }
-                if (!params.file && !params.conversionUrl) {
-                    throw Error('Missing file');
                 }
                 if (params.success && typeof params.success === "function") {
                     success = params.success;
@@ -77,68 +115,37 @@ var fs = require('fs');
                     progress = params.progress;
                 }
 
-                var file, size, bytes = 0;
-
-                var dataListener = function(chunk) {
-                    if (progress) {
-                        progress({
-                            state: 'uploading',
-                            loaded: bytes += chunk.length,
-                            total: size
-                        });
-                    }
-                };
-
                 var formData = params.parameters || {};
-
-                if (params.file) {
-                    if (typeof(params.file) === 'string' || params.file instanceof String) {
-                        file = fs.createReadStream(params.file).on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (params.file instanceof fs.ReadStream) {
-                        file = params.file.on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (params.file instanceof Buffer) {
-                        if (!params.filename) {
-                            throw Error('Missing filename');
-                        }
-                        file = {
-                            value: params.file,
-                            options: {
-                                filename: params.filename,
-                                contentType: 'application/pdf'
-                            }
-                        };
-                    } else {
-                        throw Error('Did not recognise type of file');
-                    }
-
+                
+                if (formData.input === this.UPLOAD) {
                     formData.file = file;
-                    formData.input = "upload";
-                } else {
-                    formData.input = "download";
-                    formData.url = params.conversionUrl;
                 }
-
-                console.log(formData);
 
                 var options = {
                     method: 'POST',
                     uri: params.endpoint,
-                    formData: formData,
+                    formData: formData
                 };
 
                 request(options, function(error, response, body) {
                     if (!error && response.statusCode === 200) {
-                        doPoll(JSON.parse(body).uuid, params.endpoint);
+                        if (formData.callbackUrl && !(params.success || params.progress)) {
+                            //Exit without a failure
+                        } else {
+                            doPoll(JSON.parse(body).uuid, params.endpoint);
+                        }
                     } else {
                         if (failure) {
                             failure(error || new Error(JSON.stringify(response.toJSON())));
                         }
                     }
                 });
+                
+                if (formData.input === this.UPLOAD) {
+                    resetFile();
+                }
             }
-        }
+        };
     })();
 
 
