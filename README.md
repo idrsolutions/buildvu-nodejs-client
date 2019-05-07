@@ -23,13 +23,12 @@ var buildvu = require('@idrsolutions/buildvu');
 
 var endpoint = "http://localhost:8080/microservice-example/buildvu";
 
-buildvu.prepareFile("path/to/file.pdf");
-
 buildvu.convert({
     endpoint: endpoint,
     parameters: {
         // Upload a local file to the server
-		input: buildvu.UPLOAD,
+	input: buildvu.UPLOAD,
+	file: "path/to/file.pdf",
         token: "token-if-required"
     },
     
@@ -48,13 +47,11 @@ var buildvu = require('@idrsolutions/buildvu');
 
 var endpoint = "http://localhost:8080/microservice-example/buildvu";
 
-//No prepareFile() required
-
 buildvu.convert({
     endpoint: endpoint,
     parameters: {
         // Download a remote file on the server
-		input: buildvu.DOWNLOAD,
+	input: buildvu.DOWNLOAD,
         url: 'http://example/url/file.pdf'
     },
     
