@@ -32,15 +32,14 @@ function successListener(e) {
 
 var endpoint = "http://localhost:8080/microservice-example/buildvu";
 
-buildvu.prepareFile("path/to/file.pdf");
-
 buildvu.convert({
     endpoint: endpoint,
     // The parameters object should contain the parameters that are sent to the API
     // See https://github.com/idrsolutions/buildvu-microservice-example/blob/master/API.md
     parameters: {
         // Upload a local file to the server
-		input: buildvu.UPLOAD
+		input: buildvu.UPLOAD,
+        file: "path/to/file.pdf" 
         //token: "token-if-required"
     },
     
@@ -51,7 +50,6 @@ buildvu.convert({
 });
 
 // Alternatively you can specify a URL for the server to download the file from.
-// prepareFile() does not need to be called when using this input method.
 // To use the URL parameter, input must be set as DOWNLOAD
 //buildvu.convert({
     //endpoint: endpoint,

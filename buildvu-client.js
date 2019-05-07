@@ -17,15 +17,15 @@
 var request = require('request');
 var fs = require('fs');
 
-(function() {
-    var Converter = (function() {
+(function () {
+    var Converter = (function () {
 
-        var doPoll = function(uuid, endpoint) {
+        var doPoll = function (uuid, endpoint) {
             var req, retries = 0;
 
-            var poll = setInterval(function() {
+            var poll = setInterval(function () {
                 if (!req) {
-                    req = request(endpoint + "?uuid=" + uuid, function(error, response, body) {
+                    req = request(endpoint + "?uuid=" + uuid, function (error, response, body) {
                         if (!error && response.statusCode === 200) {
                             var data = JSON.parse(body);
                             if (data.state === "processed") {
@@ -57,51 +57,28 @@ var fs = require('fs');
             }, 500);
         };
 
-        var resetFile = function() {
-            file = undefined;
-        };
-
         var progress, success, failure;
-        var file;
 
         return {
             UPLOAD: 'upload',
             DOWNLOAD: 'download',
-            prepareFile: function(fileValue, filename) {
-                var size, bytes = 0;
-                
-                var dataListener = function(chunk) {
-                    if (progress) {
-                        progress({
-                            state: 'uploading',
-                            loaded: bytes += chunk.length,
-                            total: size
-                        });
-                    }
-                };
-                
-                if (typeof(fileValue) === 'string' || fileValue instanceof String) {
-                    file = fs.createReadStream(fileValue).on('data', dataListener);
-                    size = fs.lstatSync(file.path).size;
-                } else if (fileValue instanceof fs.ReadStream) {
-                    file = fileValue.on('data', dataListener);
-                    size = fs.lstatSync(file.path).size;
-                } else if (fileValue instanceof Buffer) {
+            bufferToFile: function (file, filename) {
+                var returnFile;
+                if (file instanceof Buffer) {
                     if (!filename) {
                         throw Error('Missing filename');
                     }
-                    file = {
-                        value: fileValue,
+                    returnFile = {
+                        value: file,
                         options: {
                             filename: filename,
                             contentType: 'application/pdf'
                         }
                     };
-                } else {
-                    throw Error('Did not recognise type of file');
                 }
+                return returnFile;
             },
-            convert: function(params) {
+            convert: function (params) {
                 if (!params.endpoint) {
                     throw Error('Missing endpoint');
                 }
@@ -116,8 +93,32 @@ var fs = require('fs');
                 }
 
                 var formData = params.parameters || {};
-                
+
                 if (formData.input === this.UPLOAD) {
+                    var size, bytes = 0;
+
+                    var dataListener = function (chunk) {
+                        if (progress) {
+                            progress({
+                                state: 'uploading',
+                                loaded: bytes += chunk.length,
+                                total: size
+                            });
+                        }
+                    };
+
+                    if (typeof (formData.file) === 'string' || formData.file instanceof String) {
+                        file = fs.createReadStream(formData.file).on('data', dataListener);
+                        size = fs.lstatSync(file.path).size;
+                    } else if (formData.file instanceof fs.ReadStream) {
+                        file = formData.file.on('data', dataListener);
+                        size = fs.lstatSync(file.path).size;
+                    } else if (formData.file instanceof Buffer) {
+                        throw Error('Please use the bufferToFile method on your file parameter');
+                    } else {
+                        throw Error('Did not recognise type of file');
+                    }
+
                     formData.file = file;
                 }
 
@@ -127,7 +128,7 @@ var fs = require('fs');
                     formData: formData
                 };
 
-                request(options, function(error, response, body) {
+                request(options, function (error, response, body) {
                     if (!error && response.statusCode === 200) {
                         if (formData.callbackUrl && !(params.success || params.progress)) {
                             //Exit without a failure
@@ -140,21 +141,17 @@ var fs = require('fs');
                         }
                     }
                 });
-                
-                if (formData.input === this.UPLOAD) {
-                    resetFile();
-                }
             }
         };
     })();
 
 
-    if(typeof define === "function" && define.amd) {
+    if (typeof define === "function" && define.amd) {
         //noinspection JSUnresolvedFunction
-        define(['converter'], [], function() {
+        define(['converter'], [], function () {
             return Converter;
         });
-    } else if(typeof module === "object" && module.exports) {
+    } else if (typeof module === "object" && module.exports) {
         module.exports = Converter;
     }
 
