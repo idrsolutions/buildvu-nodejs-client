@@ -94,32 +94,29 @@ var fs = require('fs');
 
                 var formData = params.parameters || {};
 
-                if (formData.input === this.UPLOAD) {
-                    var size, bytes = 0;
+                if (typeof formData.input === 'undefined' || formData.input == null) {
+                    throw Error("Parameter 'input' must be provided");
+                }
 
-                    var dataListener = function (chunk) {
-                        if (progress) {
-                            progress({
-                                state: 'uploading',
-                                loaded: bytes += chunk.length,
-                                total: size
-                            });
+                switch (formData.input) {
+                    case this.UPLOAD:
+                        if (typeof formData.file === 'undefined' || formData.file == null) {
+                            throw Error("Parameter 'file' must be provided when using input=upload");
+                        } else if (formData.file instanceof Buffer) {
+                            throw Error('Please use the bufferToFile method on your file parameter');
+                        } else if (typeof formData.file === 'string' || formData.file instanceof String) {
+                            formData.file = fs.createReadStream(formData.file);
+                        } else if (!formData.file instanceof fs.ReadStream && !formData.file['value'] && !formData.file['options']
+                                   && !formData.file.options['filename'] && !formData.file.options['contentType']) {
+                            throw Error("Did not recognise type of 'file' parameter");
                         }
-                    };
+                        break;
 
-                    if (typeof (formData.file) === 'string' || formData.file instanceof String) {
-                        file = fs.createReadStream(formData.file).on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (formData.file instanceof fs.ReadStream) {
-                        file = formData.file.on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (formData.file instanceof Buffer) {
-                        throw Error('Please use the bufferToFile method on your file parameter');
-                    } else {
-                        throw Error('Did not recognise type of file');
-                    }
-
-                    formData.file = file;
+                    case this.DOWNLOAD:
+                        if (typeof formData.url === 'undefined' || formData.url == null) {
+                            throw Error("Parameter 'url' must be provided when using input=download");
+                        }
+                        break;
                 }
 
                 var options = {
