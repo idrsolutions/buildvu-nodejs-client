@@ -38,7 +38,7 @@ buildvu.convert({
     // See https://github.com/idrsolutions/buildvu-microservice-example/blob/master/API.md
     parameters: {
         // Upload a local file to the server
-		input: buildvu.UPLOAD,
+        input: buildvu.UPLOAD,
         file: "path/to/file.pdf" 
         //token: "token-if-required"
     },
