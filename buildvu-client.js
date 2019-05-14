@@ -17,15 +17,15 @@
 var request = require('request');
 var fs = require('fs');
 
-(function() {
-    var Converter = (function() {
+(function () {
+    var Converter = (function () {
 
-        var doPoll = function(uuid, endpoint) {
+        var doPoll = function (uuid, endpoint) {
             var req, retries = 0;
 
-            var poll = setInterval(function() {
+            var poll = setInterval(function () {
                 if (!req) {
-                    req = request(endpoint + "?uuid=" + uuid, function(error, response, body) {
+                    req = request(endpoint + "?uuid=" + uuid, function (error, response, body) {
                         if (!error && response.statusCode === 200) {
                             var data = JSON.parse(body);
                             if (data.state === "processed") {
@@ -60,12 +60,27 @@ var fs = require('fs');
         var progress, success, failure;
 
         return {
-            convert: function(params) {
+            UPLOAD: 'upload',
+            DOWNLOAD: 'download',
+            bufferToFile: function (file, filename) {
+                var returnFile;
+                if (file instanceof Buffer) {
+                    if (!filename) {
+                        throw Error('Missing filename');
+                    }
+                    returnFile = {
+                        value: file,
+                        options: {
+                            filename: filename,
+                            contentType: 'application/pdf'
+                        }
+                    };
+                }
+                return returnFile;
+            },
+            convert: function (params) {
                 if (!params.endpoint) {
                     throw Error('Missing endpoint');
-                }
-                if (!params.file && !params.conversionUrl) {
-                    throw Error('Missing file');
                 }
                 if (params.success && typeof params.success === "function") {
                     success = params.success;
@@ -77,60 +92,46 @@ var fs = require('fs');
                     progress = params.progress;
                 }
 
-                var file, size, bytes = 0;
-
-                var dataListener = function(chunk) {
-                    if (progress) {
-                        progress({
-                            state: 'uploading',
-                            loaded: bytes += chunk.length,
-                            total: size
-                        });
-                    }
-                };
-
                 var formData = params.parameters || {};
 
-                if (params.file) {
-                    if (typeof(params.file) === 'string' || params.file instanceof String) {
-                        file = fs.createReadStream(params.file).on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (params.file instanceof fs.ReadStream) {
-                        file = params.file.on('data', dataListener);
-                        size = fs.lstatSync(file.path).size;
-                    } else if (params.file instanceof Buffer) {
-                        if (!params.filename) {
-                            throw Error('Missing filename');
-                        }
-                        file = {
-                            value: params.file,
-                            options: {
-                                filename: params.filename,
-                                contentType: 'application/pdf'
-                            }
-                        };
-                    } else {
-                        throw Error('Did not recognise type of file');
-                    }
-
-                    formData.file = file;
-                    formData.input = "upload";
-                } else {
-                    formData.input = "download";
-                    formData.url = params.conversionUrl;
+                if (typeof formData.input === 'undefined' || formData.input == null) {
+                    throw Error("Parameter 'input' must be provided");
                 }
 
-                console.log(formData);
+                switch (formData.input) {
+                    case this.UPLOAD:
+                        if (typeof formData.file === 'undefined' || formData.file == null) {
+                            throw Error("Parameter 'file' must be provided when using input=upload");
+                        } else if (formData.file instanceof Buffer) {
+                            throw Error('Please use the bufferToFile method on your file parameter');
+                        } else if (typeof formData.file === 'string' || formData.file instanceof String) {
+                            formData.file = fs.createReadStream(formData.file);
+                        } else if (!formData.file instanceof fs.ReadStream && !formData.file['value'] && !formData.file['options']
+                                   && !formData.file.options['filename'] && !formData.file.options['contentType']) {
+                            throw Error("Did not recognise type of 'file' parameter");
+                        }
+                        break;
+
+                    case this.DOWNLOAD:
+                        if (typeof formData.url === 'undefined' || formData.url == null) {
+                            throw Error("Parameter 'url' must be provided when using input=download");
+                        }
+                        break;
+                }
 
                 var options = {
                     method: 'POST',
                     uri: params.endpoint,
-                    formData: formData,
+                    formData: formData
                 };
 
-                request(options, function(error, response, body) {
+                request(options, function (error, response, body) {
                     if (!error && response.statusCode === 200) {
-                        doPoll(JSON.parse(body).uuid, params.endpoint);
+                        if (formData.callbackUrl && !(params.success || params.progress)) {
+                            //Exit without a failure
+                        } else {
+                            doPoll(JSON.parse(body).uuid, params.endpoint);
+                        }
                     } else {
                         if (failure) {
                             failure(error || new Error(JSON.stringify(response.toJSON())));
@@ -138,16 +139,16 @@ var fs = require('fs');
                     }
                 });
             }
-        }
+        };
     })();
 
 
-    if(typeof define === "function" && define.amd) {
+    if (typeof define === "function" && define.amd) {
         //noinspection JSUnresolvedFunction
-        define(['converter'], [], function() {
+        define(['converter'], [], function () {
             return Converter;
         });
-    } else if(typeof module === "object" && module.exports) {
+    } else if (typeof module === "object" && module.exports) {
         module.exports = Converter;
     }
 

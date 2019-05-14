@@ -16,7 +16,7 @@ npm install @idrsolutions/buildvu
 
 # Usage #
 
-## Basic: #
+## Basic: (Upload) #
 
 ```javascript
 var buildvu = require('@idrsolutions/buildvu');
@@ -26,19 +26,45 @@ var endpoint = "http://localhost:8080/microservice-example/buildvu";
 buildvu.convert({
     endpoint: endpoint,
     parameters: {
+        // Upload a local file to the server
+	input: buildvu.UPLOAD,
+	file: "path/to/file.pdf",
         token: "token-if-required"
     },
-    // Upload a local file to the server.
-    file: "your-filename.pdf",
-    // Convert file from url (file takes precedence over this option).
-    conversionUrl: "http://path.to/file.pdf",
+    
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log("Converted " + e.previewUrl);
+        console.log('Converted ' + e.previewUrl);
     }
+    
 });
 ```
+
+## Basic: (Download) #
+```javascript
+var buildvu = require('@idrsolutions/buildvu');
+
+var endpoint = "http://localhost:8080/microservice-example/buildvu";
+
+buildvu.convert({
+    endpoint: endpoint,
+    parameters: {
+        // Download a remote file on the server
+	input: buildvu.DOWNLOAD,
+        url: 'http://example/url/file.pdf'
+    },
+    
+    failure: function() { },
+    progress: function() { },
+    success: function(e) {
+        console.log('Converted ' + e.previewUrl);
+    }
+    
+});
+```
+The parameters object should contain the parameters that are sent to the API
+See the [API](https://github.com/idrsolutions/buildvu-microservice-example/blob/master/API.md) for more details.
 
 See `example.js` for examples.
 
