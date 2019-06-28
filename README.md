@@ -35,9 +35,9 @@ buildvu.convert({
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.downloadUrl);
+        console.log('Converted ' + e.previewUrl);
     }
-    
+
 });
 ```
 
@@ -54,11 +54,11 @@ buildvu.convert({
 	input: buildvu.DOWNLOAD,
         url: 'http://example/url/file.pdf'
     },
-    
+
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.downloadUrl);
+        console.log('Converted ' + e.previewUrl);
     }
     
 });
