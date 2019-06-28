@@ -35,7 +35,7 @@ buildvu.convert({
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.previewUrl);
+        console.log('Converted ' + e.downloadUrl);
     }
     
 });
@@ -58,7 +58,7 @@ buildvu.convert({
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.previewUrl);
+        console.log('Converted ' + e.downloadUrl);
     }
     
 });
