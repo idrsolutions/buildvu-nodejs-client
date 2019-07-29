@@ -45,10 +45,10 @@ buildvu.convert({
 ```javascript
 var buildvu = require('@idrsolutions/buildvu');
 
-var endpoint = "http://localhost:8080/microservice-example/buildvu";
+var endpoint = "http://localhost:8080/microservice-example";
 
 buildvu.convert({
-    endpoint: endpoint,
+    endpoint: endpoint + "/buildvu",
     parameters: {
         // Download a remote file on the server
 	input: buildvu.DOWNLOAD,
@@ -58,7 +58,8 @@ buildvu.convert({
     failure: function() { },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.previewUrl);
+        //console.log('Converted ' + e.previewUrl);
+        console.log('Converted ' + e.downloadUrl);
     }
     
 });
