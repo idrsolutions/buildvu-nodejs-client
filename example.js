@@ -21,7 +21,7 @@ function progressListener(e) {
 }
 
 function failureListener(e) {
-    console.log(JSON.stringify(e));
+    console.log(e);
     console.log("Failed!");
 }
 

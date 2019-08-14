@@ -32,7 +32,9 @@ buildvu.convert({
         token: "token-if-required"
     },
     
-    failure: function() { },
+    failure: function(e) {
+        console.log(e);
+    },
     progress: function() { },
     success: function(e) {
        // console.log('Converted ' + e.previewUrl);
@@ -56,7 +58,9 @@ buildvu.convert({
         url: 'http://example/url/file.pdf'
     },
 
-    failure: function() { },
+    failure: function(e) {
+        console.log(e);
+    },
     progress: function() { },
     success: function(e) {
         console.log('Converted ' + e.previewUrl);
