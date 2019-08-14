@@ -25,7 +25,7 @@ var fs = require('fs');
 
             var poll = setInterval(function () {
                 if (!req) {
-                    req = request(endpoint + "?uuid=" + uuid, function (error, response, body) {
+                    req = request(endpoint + "buildvu" + "?uuid=" + uuid, function (error, response, body) {
                         if (!error && response.statusCode === 200) {
                             var data = JSON.parse(body);
                             if (data.state === "processed") {
@@ -121,7 +121,7 @@ var fs = require('fs');
 
                 var options = {
                     method: 'POST',
-                    uri: params.endpoint,
+                    uri: params.endpoint + 'buildvu',
                     formData: formData
                 };
 

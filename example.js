@@ -27,10 +27,11 @@ function failureListener(e) {
 
 function successListener(e) {
     console.log(JSON.stringify(e));
-    console.log("Converted " + e.previewUrl);
+   // console.log("Converted " + e.previewUrl);
+   console.log("Converted " + e.downloadUrl);
 }
 
-var endpoint = "http://localhost:8080/microservice-example/buildvu";
+var endpoint = "http://localhost:8080/microservice-example/";
 
 buildvu.convert({
     endpoint: endpoint,
@@ -39,7 +40,7 @@ buildvu.convert({
     parameters: {
         // Upload a local file to the server
         input: buildvu.UPLOAD,
-        file: "path/to/file.pdf" 
+        file: "path/to/file.pdf"
         //token: "token-if-required"
     },
     
