@@ -27,8 +27,8 @@ buildvu.convert({
     endpoint: endpoint,
     parameters: {
         // Upload a local file to the server
-	input: buildvu.UPLOAD,
-	file: "path/to/file.pdf",
+        input: buildvu.UPLOAD,
+        file: "path/to/file.pdf",
         token: "token-if-required"
     },
     
@@ -37,7 +37,6 @@ buildvu.convert({
     },
     progress: function() { },
     success: function(e) {
-       // console.log('Converted ' + e.previewUrl);
         console.log('Converted ' + e.downloadUrl);
     }
 
@@ -54,7 +53,7 @@ buildvu.convert({
     endpoint: endpoint,
     parameters: {
         // Download a remote file on the server
-	input: buildvu.DOWNLOAD,
+	    input: buildvu.DOWNLOAD,
         url: 'http://example/url/file.pdf'
     },
 
@@ -63,7 +62,7 @@ buildvu.convert({
     },
     progress: function() { },
     success: function(e) {
-        console.log('Converted ' + e.previewUrl);
+        console.log('Converted ' + e.downloadUrl);
     }
     
 });
