@@ -31,7 +31,7 @@ function successListener(e) {
    console.log("Converted " + e.downloadUrl);
 }
 
-var endpoint = "http://localhost:8080/microservice-example/";
+var endpoint = "http://localhost:8080/buildvu-microservice/";
 
 buildvu.convert({
     endpoint: endpoint,
