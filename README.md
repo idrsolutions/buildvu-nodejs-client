@@ -53,7 +53,7 @@ buildvu.convert({
     endpoint: endpoint,
     parameters: {
         // Download a remote file on the server
-	    input: buildvu.DOWNLOAD,
+        input: buildvu.DOWNLOAD,
         url: 'http://example/url/file.pdf'
     },
 
