@@ -119,11 +119,32 @@ var fs = require('fs');
                         break;
                 }
 
-                var options = {
-                    method: 'POST',
-                    uri: params.endpoint + 'buildvu',
-                    formData: formData
-                };
+                var options;
+
+                if (params.username || params.password) {
+                    if (!params.username) {
+                        throw Error('Password provided but username is missing');
+                    }
+
+                    if (!params.password) {
+                        throw Error('Username provided but password is missing');
+                    }
+                    options = {
+                        method: 'POST',
+                        uri: params.endpoint + 'buildvu',
+                        auth: {
+                            username: params.username,
+                            password: params.password
+                        },
+                        formData: formData
+                    };
+                } else {
+                    options = {
+                        method: 'POST',
+                        uri: params.endpoint + 'buildvu',
+                        formData: formData
+                    };
+                }
 
                 request(options, function (error, response, body) {
                     if (!error && response.statusCode === 200) {

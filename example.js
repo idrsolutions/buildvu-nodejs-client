@@ -43,7 +43,10 @@ buildvu.convert({
         file: "path/to/file.pdf"
         //token: "token-if-required"
     },
-    
+    // Basic authentication values if required
+    username: "username-if-required",
+    password: "password-if-required",
+
     // The below are the available listeners
     progress: progressListener,
     success: successListener,
