@@ -25,7 +25,23 @@ var fs = require('fs');
 
             var poll = setInterval(function () {
                 if (!req) {
-                    req = request(endpoint + "buildvu" + "?uuid=" + uuid, function (error, response, body) {
+                    if (username && password) {
+                        options = {
+                            method: 'GET',
+                            uri: endpoint + "buildvu" + "?uuid=" + uuid,
+                            auth : {
+                                username : username,
+                                password : password
+                            }
+                        };
+                    } else {
+                        options = {
+                            method: 'GET',
+                            uri: endpoint + "buildvu" + "?uuid=" + uuid,
+                        };
+                    }
+
+                    req = request(options, function (error, response, body) {
                         if (!error && response.statusCode === 200) {
                             var data = JSON.parse(body);
                             if (data.state === "processed") {
@@ -57,7 +73,7 @@ var fs = require('fs');
             }, 500);
         };
 
-        var progress, success, failure;
+        var progress, success, failure, username, password;
 
         return {
             UPLOAD: 'upload',
@@ -124,10 +140,14 @@ var fs = require('fs');
                 if (params.username || params.password) {
                     if (!params.username) {
                         throw Error('Password provided but username is missing');
+                    } else {
+                        username = params.username;
                     }
 
                     if (!params.password) {
                         throw Error('Username provided but password is missing');
+                    } else {
+                        password = params.password;
                     }
                     options = {
                         method: 'POST',
