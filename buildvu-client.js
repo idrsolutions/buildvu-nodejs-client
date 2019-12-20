@@ -149,7 +149,7 @@ var fs = require('fs');
                     options.auth = {
                         username: username,
                         password: password
-                    }
+                    };
                 }
 
                 request(options, function (error, response, body) {
