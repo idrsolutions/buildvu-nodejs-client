@@ -25,19 +25,14 @@ var fs = require('fs');
 
             var poll = setInterval(function () {
                 if (!req) {
+                    var options = {
+                        method: 'GET',
+                        uri: endpoint + "buildvu" + "?uuid=" + uuid,
+                    };
                     if (username && password) {
-                        options = {
-                            method: 'GET',
-                            uri: endpoint + "buildvu" + "?uuid=" + uuid,
-                            auth : {
-                                username : username,
-                                password : password
-                            }
-                        };
-                    } else {
-                        options = {
-                            method: 'GET',
-                            uri: endpoint + "buildvu" + "?uuid=" + uuid,
+                        options.auth = {
+                            username: username,
+                            password: password
                         };
                     }
 
@@ -135,35 +130,26 @@ var fs = require('fs');
                         break;
                 }
 
-                var options;
+                var options = {
+                    method: 'POST',
+                    uri: params.endpoint + 'buildvu',
+                    formData: formData
+                };
 
                 if (params.username || params.password) {
                     if (!params.username) {
                         throw Error('Password provided but username is missing');
-                    } else {
-                        username = params.username;
+                    } else if (!params.password) {
+                        throw Error('Username provided but password is missing');
                     }
 
-                    if (!params.password) {
-                        throw Error('Username provided but password is missing');
-                    } else {
-                        password = params.password;
+                    username = params.username;
+                    password = params.password;
+
+                    options.auth = {
+                        username: username,
+                        password: password
                     }
-                    options = {
-                        method: 'POST',
-                        uri: params.endpoint + 'buildvu',
-                        auth: {
-                            username: params.username,
-                            password: params.password
-                        },
-                        formData: formData
-                    };
-                } else {
-                    options = {
-                        method: 'POST',
-                        uri: params.endpoint + 'buildvu',
-                        formData: formData
-                    };
                 }
 
                 request(options, function (error, response, body) {
