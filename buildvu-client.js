@@ -25,7 +25,18 @@ var fs = require('fs');
 
             var poll = setInterval(function () {
                 if (!req) {
-                    req = request(endpoint + "buildvu" + "?uuid=" + uuid, function (error, response, body) {
+                    var options = {
+                        method: 'GET',
+                        uri: endpoint + "buildvu" + "?uuid=" + uuid,
+                    };
+                    if (username && password) {
+                        options.auth = {
+                            username: username,
+                            password: password
+                        };
+                    }
+
+                    req = request(options, function (error, response, body) {
                         if (!error && response.statusCode === 200) {
                             var data = JSON.parse(body);
                             if (data.state === "processed") {
@@ -57,7 +68,7 @@ var fs = require('fs');
             }, 500);
         };
 
-        var progress, success, failure;
+        var progress, success, failure, username, password;
 
         return {
             UPLOAD: 'upload',
@@ -124,6 +135,22 @@ var fs = require('fs');
                     uri: params.endpoint + 'buildvu',
                     formData: formData
                 };
+
+                if (params.username || params.password) {
+                    if (!params.username) {
+                        throw Error('Password provided but username is missing');
+                    } else if (!params.password) {
+                        throw Error('Username provided but password is missing');
+                    }
+
+                    username = params.username;
+                    password = params.password;
+
+                    options.auth = {
+                        username: username,
+                        password: password
+                    };
+                }
 
                 request(options, function (error, response, body) {
                     if (!error && response.statusCode === 200) {
