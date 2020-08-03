@@ -1,3 +1,6 @@
+# THIS PACKAGE HAS BEEN DEPRECATED #
+Future development has been directed to the [idrsolutuions client](https://github.com/idrsolutions/idrsolutions-nodejs-client), which can be used for the same purpose. This package will receive no more updates. 
+
 # BuildVu Node.js Client #
 
 Convert PDF to HTML5 or SVG with Node.js, using the BuildVu Node.js Client to interact with IDRsolutions' [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).

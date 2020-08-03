@@ -1,7 +1,7 @@
 {
   "name": "@idrsolutions/buildvu",
-  "version": "4.1.3",
-  "description": "BuildVu Node.js Client is the Node.js API for IDRSolutions' BuildVu Microservice Example.",
+  "version": "4.1.4",
+  "description": "[DEPRECATED] Future development has been directed to idrsolutions-nodejs-client, which can be used for the same purpose. This package will receive no more updates.",
   "main": "buildvu-client.js",
   "repository": {
     "type": "git",
