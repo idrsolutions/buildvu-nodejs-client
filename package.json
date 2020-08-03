@@ -1,6 +1,6 @@
 {
   "name": "@idrsolutions/buildvu",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "description": "[DEPRECATED] Future development has been directed to idrsolutions-nodejs-client, which can be used for the same purpose. This package will receive no more updates.",
   "main": "buildvu-client.js",
   "repository": {
